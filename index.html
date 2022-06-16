@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+	<head>
+<meta charset="UTF-8">
+<title>koppelteken</title>
+		<script>
+			
+	
+
+window.onload = function() { 
+navigator.clipboard.readText()
+  .then(text => {
+    // `text` contains the text read from the clipboard
+    document.getElementById('orig').innerHTML = text;
+    text = text.toLowerCase();
+    text = text.replaceAll('\'', '');
+    text = text.replaceAll('"', '');
+    text = text.replaceAll(',', '-');
+    text = text.replaceAll('?', '-');
+    text = text.replaceAll('!', '-');
+    text = text.replaceAll(':', '');
+    text = text.replaceAll(' ', '-');
+    // replace line breaks/enters
+    text = text.replace(/\n/g, "-");
+    text = text.replaceAll('_', '-');
+    text = text.replaceAll('+', '-');
+    text = text.replaceAll('/ ', '-');
+    text = text.replaceAll('&', '-');
+    text = text.replaceAll('(', '-');
+    text = text.replaceAll(')', '-');
+    text = text.replaceAll('--', '-');
+    text = text.replaceAll('--', '-');
+    text = text.replaceAll('--', '-');
+    text = text.replaceAll('-.', '.');
+    // remove diacritics
+    text = text.normalize("NFD").replace(/\p{Diacritic}/gu, "");
+    // remove any non-ascii chars
+    text = text.replaceAll(/[^\x00-\x7F]/g, "");;
+    document.getElementById('cleaned').innerHTML = text;
+    navigator.clipboard.writeText(text).then(function() {
+      console.log('Async: Copying to clipboard was successful!');
+      document.getElementById("copied").className += " load";
+      
+      setInterval(function(){ document.getElementById("copied").className = "regel"; }, 3000);
+    }, function(err) {
+      console.error('Async: Could not copy text: ', err);
+    });
+  })
+  .catch(err => {
+    // maybe user didn't grant access to read from clipboard
+    console.log('Something went wrong', err);
+  });
+
+};
+
+
+		</script>
+
+<style>
+.main {
+    padding-left: 40px;
+    padding-top: 20px;
+}
+.regel {
+    font-size: 32px;
+    padding-top: 40px;
+    border-radius: 15px;
+}
+.tekst {
+    font-weight: bold;
+}
+#orig {
+    color: #777;
+}
+#cleaned {
+    color: blue;
+}
+#copied {
+    background-color: #33eedc4d;
+    opacity: 0;
+    font-size: 21px;
+    margin: 40px;
+    text-align: center;
+    padding: 10px;
+    border-radius: 15px;
+
+    -webkit-transition: opacity 2s ease-in;
+       -moz-transition: opacity 2s ease-in;
+        -ms-transition: opacity 2s ease-in;
+         -o-transition: opacity 2s ease-in;
+            transition: opacity 1s ease-in;
+}
+
+#copied.load {
+    opacity: 1;
+}
+td {
+    padding: 8px;
+}
+#orig, #cleaned {
+    background: #eee;
+    padding: 8px;
+    border-radius: 15px;
+}
+.knop {
+    display:inline-block;
+    font-weight: bold;
+    border:1px solid #CCC;
+    box-shadow: 0 0 5px -1px rgba(0,0,0,0.2);
+    cursor:pointer;
+    vertical-align:middle;
+    max-width: 100px;
+    padding: 15px;
+    text-align: center;
+    background-color: #69d4ff;
+    border-radius: 15px;
+    color: #ececec;
+}
+.knop:hover {
+  box-shadow: 0 5px 15px rgba(145, 92, 182, .4);
+    color: #eee;
+}
+.topblock {
+    padding: 20px;
+}
+body {
+  font-family: Helvetica, sans-serif;
+}
+</style>
+	</head>
+	<body>
+        <table>
+        <tr>
+        <td>
+        <div class="main">
+            <div class="topblock">
+            <p>
+                Tekst in je klembord wordt opgeschoond en weer naar je klembord gekopieerd:
+                <ul>
+                    <li>
+                        ' ', '+', '_', '&', '(' en ')' worden vervangen door een streepje
+                    </li>
+                    <li>
+                        hoofdletters worden vervangen door kleine letters
+                    </li>
+                    <li>
+                        enkele en dubbele aanhalingstekens worden verwijderd
+                    </li>
+                    <li>
+                        accenten worden verwijderd (<i>Crème Brulée</i> -> creme-brulee)
+                    </li>
+                </ul>
+                Let op: deze pagina werkt alleen in de Chrome browser
+            </div>
+        </div>
+        </td>
+        <td>
+        <div class="topblock">
+        <div class="knop" onclick="window.onload();">
+            Volgende tekst opschonen
+        </div>
+        </div>
+        </td>
+        </tr>
+        </table>
+        <table>
+        <tr class="regel">
+            <td>
+              originele naam:
+            </td>
+            <td>
+                <span class="tekst" id="orig"></span><br/>
+            </td>
+        </tr>
+        <tr class="regel">
+            <td>
+              nieuwe naam: 
+            </td>
+            <td>
+                <span class="tekst" id="cleaned"></span>
+            </td>
+          </tr>
+        </table>
+        <div class="regel" id="copied">
+            De nieuwe naam is gekopieerd naar je klembord.
+        </div>
+	</body>
+</html>
+
